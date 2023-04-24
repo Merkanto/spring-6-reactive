@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 
 @DataR2dbcTest
 @Import(DatabaseConfig.class)
-class PhoneRepositoryTest {
+public class PhoneRepositoryTest {
     @Autowired
     PhoneRepository phoneRepository;
 
@@ -32,7 +32,7 @@ class PhoneRepositoryTest {
                 });
     }
 
-    Phone getTestPhone() {
+    public static Phone getTestPhone() {
         return Phone.builder()
                 .phoneName("Space Dust")
                 .phoneStyle("IPA")

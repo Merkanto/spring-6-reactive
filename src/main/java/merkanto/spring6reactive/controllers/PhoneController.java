@@ -22,7 +22,7 @@ public class PhoneController {
     @DeleteMapping(PHONE_PATH_ID)
     Mono<ResponseEntity<Void>> deleteById(@PathVariable("phoneId") Integer phoneId) {
         return phoneService.deletePhoneById(phoneId)
-                .map(response -> ResponseEntity.noContent().build());
+                .thenReturn(ResponseEntity.noContent().build());
     }
 
     @PatchMapping(PHONE_PATH_ID)
@@ -39,7 +39,7 @@ public class PhoneController {
 //                .map(savedDto -> ResponseEntity.ok().build());
 
         phoneService.updatePhone(phoneId, phoneDTO).subscribe();
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping(PHONE_PATH)
