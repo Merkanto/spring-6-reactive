@@ -14,6 +14,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.mockOAuth2Login;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest
@@ -25,7 +26,9 @@ class PhoneControllerTest {
 
     @Test
     void testPatchIdNotFound() {
-        webTestClient.patch()
+        webTestClient
+                .mutateWith(mockOAuth2Login())
+                .patch()
                 .uri(PhoneController.PHONE_PATH_ID, 999)
                 .body(Mono.just(PhoneRepositoryTest.getTestPhone()), PhoneDTO.class)
                 .exchange()
@@ -34,7 +37,9 @@ class PhoneControllerTest {
 
     @Test
     void testDeleteNotFound() {
-        webTestClient.delete()
+        webTestClient
+                .mutateWith(mockOAuth2Login())
+                .delete()
                 .uri(PhoneController.PHONE_PATH_ID, 999)
                 .exchange()
                 .expectStatus().isNotFound();
@@ -43,7 +48,9 @@ class PhoneControllerTest {
     @Test
     @Order(999)
     void testDeletePhone() {
-        webTestClient.delete()
+        webTestClient
+                .mutateWith(mockOAuth2Login())
+                .delete()
                 .uri(PhoneController.PHONE_PATH_ID, 1)
                 .exchange()
                 .expectStatus()
@@ -55,7 +62,9 @@ class PhoneControllerTest {
     void testUpdatePhoneBadRequest() {
         Phone testPhone = PhoneRepositoryTest.getTestPhone();
         testPhone.setPhoneStyle("");
-        webTestClient.put()
+        webTestClient
+                .mutateWith(mockOAuth2Login())
+                .put()
                 .uri(PhoneController.PHONE_PATH_ID, 1)
                 .body(Mono.just(testPhone), PhoneDTO.class)
                 .exchange()
@@ -64,7 +73,9 @@ class PhoneControllerTest {
 
     @Test
     void testUpdatePhoneNotFound() {
-        webTestClient.put()
+        webTestClient
+                .mutateWith(mockOAuth2Login())
+                .put()
                 .uri(PhoneController.PHONE_PATH_ID, 999)
                 .body(Mono.just(PhoneRepositoryTest.getTestPhone()), PhoneDTO.class)
                 .exchange()
@@ -74,7 +85,9 @@ class PhoneControllerTest {
     @Test
     @Order(3)
     void testUpdatePhone() {
-        webTestClient.put()
+        webTestClient
+                .mutateWith(mockOAuth2Login())
+                .put()
                 .uri(PhoneController.PHONE_PATH_ID, 1)
                 .body(Mono.just(PhoneRepositoryTest.getTestPhone()), PhoneDTO.class)
                 .exchange()
@@ -85,7 +98,9 @@ class PhoneControllerTest {
     void testCreatePhoneBadData() {
         Phone testPhone = PhoneRepositoryTest.getTestPhone();
         testPhone.setPhoneName("");
-        webTestClient.post().uri(PhoneController.PHONE_PATH)
+        webTestClient
+                .mutateWith(mockOAuth2Login())
+                .post().uri(PhoneController.PHONE_PATH)
                 .body(Mono.just(testPhone), PhoneDTO.class)
                 .header("Content-type", "application/json")
                 .exchange()
@@ -94,7 +109,9 @@ class PhoneControllerTest {
 
     @Test
     void testCreatePhone() {
-        webTestClient.post().uri(PhoneController.PHONE_PATH)
+        webTestClient
+                .mutateWith(mockOAuth2Login())
+                .post().uri(PhoneController.PHONE_PATH)
                 .body(Mono.just(PhoneRepositoryTest.getTestPhone()), PhoneDTO.class)
                 .header("Content-type", "application/json")
                 .exchange()
@@ -104,7 +121,9 @@ class PhoneControllerTest {
 
     @Test
     void testGetByIdNotFound() {
-        webTestClient.get().uri(PhoneController.PHONE_PATH_ID, 999)
+        webTestClient
+                .mutateWith(mockOAuth2Login())
+                .get().uri(PhoneController.PHONE_PATH_ID, 999)
                 .exchange()
                 .expectStatus().isNotFound();
     }
@@ -112,7 +131,9 @@ class PhoneControllerTest {
     @Test
     @Order(1)
     void testGetById() {
-        webTestClient.get().uri(PhoneController.PHONE_PATH_ID, 1)
+        webTestClient
+                .mutateWith(mockOAuth2Login())
+                .get().uri(PhoneController.PHONE_PATH_ID, 1)
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().valueEquals("Content-type", "application/json")
@@ -122,7 +143,9 @@ class PhoneControllerTest {
     @Test
     @Order(2)
     void testListPhones() {
-        webTestClient.get().uri(PhoneController.PHONE_PATH)
+        webTestClient
+                .mutateWith(mockOAuth2Login())
+                .get().uri(PhoneController.PHONE_PATH)
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().valueEquals("Content-type", "application/json")
