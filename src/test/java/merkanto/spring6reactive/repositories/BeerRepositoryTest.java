@@ -3,7 +3,7 @@ package merkanto.spring6reactive.repositories;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import merkanto.spring6reactive.config.DatabaseConfig;
-import merkanto.spring6reactive.domain.Phone;
+import merkanto.spring6reactive.domain.Beer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest;
@@ -13,32 +13,33 @@ import java.math.BigDecimal;
 
 @DataR2dbcTest
 @Import(DatabaseConfig.class)
-public class PhoneRepositoryTest {
+public class BeerRepositoryTest {
+
     @Autowired
-    PhoneRepository phoneRepository;
+    BeerRepository beerRepository;
 
     @Test
     void testCreateJson() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
 
-        System.out.println(objectMapper.writeValueAsString(getTestPhone()));
+        System.out.println(objectMapper.writeValueAsString(getTestBeer()));
     }
 
     @Test
-    void saveNewPhone() {
-        phoneRepository.save(getTestPhone())
-                .subscribe(phone -> {
-                    System.out.println(phone.toString());
+    void saveNewBeer() {
+        beerRepository.save(getTestBeer())
+                .subscribe(beer -> {
+                    System.out.println(beer.toString());
                 });
     }
 
-    public static Phone getTestPhone() {
-        return Phone.builder()
-                .phoneName("Space Dust")
-                .phoneStyle("IPA")
+    public static Beer getTestBeer() {
+        return Beer.builder()
+                .beerName("Space Dust")
+                .beerStyle("IPA")
                 .price(BigDecimal.TEN)
                 .quantityOnHand(12)
-                .imei("123213")
+                .upc("123213")
                 .build();
     }
 }

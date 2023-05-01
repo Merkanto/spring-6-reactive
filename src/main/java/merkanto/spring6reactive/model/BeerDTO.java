@@ -14,19 +14,19 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PhoneDTO {
+public class BeerDTO {
 
     private Integer id;
 
     @NotBlank
     @Size(min = 3, max = 255)
-    private String phoneName;
+    private String beerName;
 
     @Size(min = 1, max = 255)
-    private String phoneStyle;
+    private String beerStyle;
 
     @Size(max = 25)
-    private String imei;
+    private String upc;
     private Integer quantityOnHand;
     private BigDecimal price;
     private LocalDateTime createdDate;

@@ -1,8 +1,8 @@
 package merkanto.spring6reactive.controllers;
 
-import merkanto.spring6reactive.domain.Phone;
-import merkanto.spring6reactive.model.PhoneDTO;
-import merkanto.spring6reactive.repositories.PhoneRepositoryTest;
+import merkanto.spring6reactive.domain.Beer;
+import merkanto.spring6reactive.model.BeerDTO;
+import merkanto.spring6reactive.repositories.BeerRepositoryTest;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -13,13 +13,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.mockOAuth2Login;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest
 @AutoConfigureWebTestClient
-class PhoneControllerTest {
+class BeerControllerTest {
 
     @Autowired
     WebTestClient webTestClient;
@@ -29,29 +28,27 @@ class PhoneControllerTest {
         webTestClient
                 .mutateWith(mockOAuth2Login())
                 .patch()
-                .uri(PhoneController.PHONE_PATH_ID, 999)
-                .body(Mono.just(PhoneRepositoryTest.getTestPhone()), PhoneDTO.class)
+                .uri(BeerController.BEER_PATH_ID, 999)
+                .body(Mono.just(BeerRepositoryTest.getTestBeer()), BeerDTO.class)
                 .exchange()
                 .expectStatus().isNotFound();
     }
 
     @Test
     void testDeleteNotFound() {
-        webTestClient
-                .mutateWith(mockOAuth2Login())
+        webTestClient.mutateWith(mockOAuth2Login())
                 .delete()
-                .uri(PhoneController.PHONE_PATH_ID, 999)
+                .uri(BeerController.BEER_PATH_ID, 999)
                 .exchange()
                 .expectStatus().isNotFound();
     }
 
     @Test
     @Order(999)
-    void testDeletePhone() {
-        webTestClient
-                .mutateWith(mockOAuth2Login())
+    void testDeleteBeer() {
+        webTestClient.mutateWith(mockOAuth2Login())
                 .delete()
-                .uri(PhoneController.PHONE_PATH_ID, 1)
+                .uri(BeerController.BEER_PATH_ID, 1)
                 .exchange()
                 .expectStatus()
                 .isNoContent();
@@ -59,71 +56,69 @@ class PhoneControllerTest {
 
     @Test
     @Order(4)
-    void testUpdatePhoneBadRequest() {
-        Phone testPhone = PhoneRepositoryTest.getTestPhone();
-        testPhone.setPhoneStyle("");
-        webTestClient
-                .mutateWith(mockOAuth2Login())
+    void testUpdateBeerBadRequest() {
+        Beer testBeer = BeerRepositoryTest.getTestBeer();
+        testBeer.setBeerStyle("");
+
+        webTestClient.mutateWith(mockOAuth2Login())
                 .put()
-                .uri(PhoneController.PHONE_PATH_ID, 1)
-                .body(Mono.just(testPhone), PhoneDTO.class)
+                .uri(BeerController.BEER_PATH_ID, 1)
+                .body(Mono.just(testBeer), BeerDTO.class)
                 .exchange()
                 .expectStatus().isBadRequest();
     }
 
     @Test
-    void testUpdatePhoneNotFound() {
-        webTestClient
-                .mutateWith(mockOAuth2Login())
+    void testUpdateBeerNotFound() {
+        webTestClient.mutateWith(mockOAuth2Login())
                 .put()
-                .uri(PhoneController.PHONE_PATH_ID, 999)
-                .body(Mono.just(PhoneRepositoryTest.getTestPhone()), PhoneDTO.class)
+                .uri(BeerController.BEER_PATH_ID, 999)
+                .body(Mono.just(BeerRepositoryTest.getTestBeer()), BeerDTO.class)
                 .exchange()
                 .expectStatus().isNotFound();
     }
 
     @Test
     @Order(3)
-    void testUpdatePhone() {
-        webTestClient
-                .mutateWith(mockOAuth2Login())
+    void testUpdateBeer() {
+        webTestClient.mutateWith(mockOAuth2Login())
                 .put()
-                .uri(PhoneController.PHONE_PATH_ID, 1)
-                .body(Mono.just(PhoneRepositoryTest.getTestPhone()), PhoneDTO.class)
+                .uri(BeerController.BEER_PATH_ID, 1)
+                .body(Mono.just(BeerRepositoryTest.getTestBeer()), BeerDTO.class)
                 .exchange()
                 .expectStatus().isNoContent();
     }
 
     @Test
-    void testCreatePhoneBadData() {
-        Phone testPhone = PhoneRepositoryTest.getTestPhone();
-        testPhone.setPhoneName("");
+    void testCreateBeerBadData() {
+        Beer testBeer = BeerRepositoryTest.getTestBeer();
+        testBeer.setBeerName("");
+
         webTestClient
                 .mutateWith(mockOAuth2Login())
-                .post().uri(PhoneController.PHONE_PATH)
-                .body(Mono.just(testPhone), PhoneDTO.class)
-                .header("Content-type", "application/json")
+                .post().uri(BeerController.BEER_PATH)
+                .body(Mono.just(testBeer), BeerDTO.class)
+                .header("Content-Type", "application/json")
                 .exchange()
                 .expectStatus().isBadRequest();
     }
 
     @Test
-    void testCreatePhone() {
+    void testCreateBeer() {
         webTestClient
                 .mutateWith(mockOAuth2Login())
-                .post().uri(PhoneController.PHONE_PATH)
-                .body(Mono.just(PhoneRepositoryTest.getTestPhone()), PhoneDTO.class)
-                .header("Content-type", "application/json")
+                .post().uri(BeerController.BEER_PATH)
+                .body(Mono.just(BeerRepositoryTest.getTestBeer()), BeerDTO.class)
+                .header("Content-Type", "application/json")
                 .exchange()
                 .expectStatus().isCreated()
-                .expectHeader().location("http://localhost:8080/api/v2/phone/4");
+                .expectHeader().location("http://localhost:8080/api/v2/beer/4");
     }
 
     @Test
     void testGetByIdNotFound() {
-        webTestClient
-                .mutateWith(mockOAuth2Login())
-                .get().uri(PhoneController.PHONE_PATH_ID, 999)
+        webTestClient.mutateWith(mockOAuth2Login())
+                .get().uri(BeerController.BEER_PATH_ID, 999)
                 .exchange()
                 .expectStatus().isNotFound();
     }
@@ -131,21 +126,19 @@ class PhoneControllerTest {
     @Test
     @Order(1)
     void testGetById() {
-        webTestClient
-                .mutateWith(mockOAuth2Login())
-                .get().uri(PhoneController.PHONE_PATH_ID, 1)
+        webTestClient.mutateWith(mockOAuth2Login())
+                .get().uri(BeerController.BEER_PATH_ID, 1)
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().valueEquals("Content-type", "application/json")
-                .expectBody(PhoneDTO.class);
+                .expectBody(BeerDTO.class);
     }
 
     @Test
     @Order(2)
-    void testListPhones() {
-        webTestClient
-                .mutateWith(mockOAuth2Login())
-                .get().uri(PhoneController.PHONE_PATH)
+    void testListBeers() {
+        webTestClient.mutateWith(mockOAuth2Login())
+                .get().uri(BeerController.BEER_PATH)
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().valueEquals("Content-type", "application/json")

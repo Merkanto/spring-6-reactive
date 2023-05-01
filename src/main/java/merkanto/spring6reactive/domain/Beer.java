@@ -15,13 +15,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Phone {
+public class Beer {
 
     @Id
     private Integer id;
-    private String phoneName;
-    private String phoneStyle;
-    private String imei;
+    private String beerName;
+    private String beerStyle;
+    private String upc;
     private Integer quantityOnHand;
     private BigDecimal price;
 
